@@ -18,7 +18,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: personal # Modify or remove accordingly
-  region: ${opt:region, 'ap-south-1'}
+  region: ${opt:region, 'us-west-2'}
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}
   apiGateway:
@@ -34,4 +34,8 @@ functions:
     events:
       - http:
           method: get
-          path: /getPDF
+          path: getpdf/{url}/
+          request:
+            parameters:
+              paths:
+                url: true

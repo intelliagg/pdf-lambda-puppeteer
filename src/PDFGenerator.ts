@@ -1,6 +1,5 @@
 import { Helper } from "./Helper";
 import { GeneratorFunction } from "./types/GeneratorTypes";
-import { getTemplate } from "./templates/pdf-template";
 
 export class PDFGenerator {
   /**
@@ -8,20 +7,20 @@ export class PDFGenerator {
    * @param {any} event - The object that comes for lambda which includes the http's attributes
    * @returns {Array<any>} array of Structure Instructions
    */
-  static getPDF: GeneratorFunction = async (event) => {
-    try {
-      const html = getTemplate({ name: "Keshav" });
-      const options = {
+  static buildEvidencefiles: GeneratorFunction = async (event) => {
+    const options = {
         format: "A4",
         printBackground: true,
         margin: { top: "1in", right: "1in", bottom: "1in", left: "1in" },
       };
 
-      const pdf = await Helper.getPDFBuffer(html, options);
-
+    try {
+      let url = event.pathParameters.url;
+      const pdf = await Helper.getPDFBuffer(url, options);
       return {
         headers: {
           "Content-type": "application/pdf",
+          "Content-Disposition": "attachment; filename='filename.pdf'"
         },
         statusCode: 200,
         body: pdf.toString("base64"),
